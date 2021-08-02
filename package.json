@@ -1,0 +1,24 @@
+{
+  "name": "emptrack",
+  "version": "1.0.0",
+  "description": "This is command-line application to manage a company's employee database. It allows non-developers to easily view and interact with information stored in databases.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MaryVPie/employee-tracker.git"
+  },
+  "author": "MaryVPie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MaryVPie/employee-tracker/issues"
+  },
+  "homepage": "https://github.com/MaryVPie/employee-tracker#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^8.1.2",
+    "mysql2": "^2.2.5"
+  }
+}
