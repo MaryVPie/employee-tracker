@@ -1,3 +1,5 @@
+USE employee_tracker_db;
+
 INSERT INTO departments (id, depname)
 VALUES (2, "Engineering"),
        (3, "Finance"),
@@ -28,4 +30,13 @@ VALUES (1, "John", "Doe", 1, null),
        (7, "Sarah", "Lourd", 7, null),
        (8, "Tom", "Allen", 8, 7),
        (9, "Jerry", "Black", 9, null),
-       (10, "Adam", "Johnson", 10, 5);       
+       (10, "Adam", "Johnson", 10, 5);
+
+ALTER TABLE departments CHANGE COLUMN `id` `id` INT NOT NULL AUTO_INCREMENT ;
+ALTER TABLE departments AUTO_INCREMENT=7;     
+
+ALTER TABLE employee_role CHANGE COLUMN `id` `id` INT NOT NULL AUTO_INCREMENT ;
+ALTER TABLE employee_role AUTO_INCREMENT=11;  
+
+ALTER TABLE employee CHANGE COLUMN `id` `id` INT NOT NULL AUTO_INCREMENT ;
+ALTER TABLE employee AUTO_INCREMENT=11;  

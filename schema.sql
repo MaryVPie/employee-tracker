@@ -6,7 +6,8 @@ USE employee_tracker_db;
 DROP TABLE IF EXISTS departments;
 CREATE TABLE departments (
   id INT NOT NULL,
-  depname VARCHAR(30) NOT NULL
+  depname VARCHAR(30) NOT NULL,
+  CONSTRAINT departments_pk PRIMARY KEY (id)
 );
 
 DROP TABLE IF EXISTS employee_role;
@@ -14,7 +15,8 @@ CREATE TABLE employee_role (
   id INT NOT NULL,
   title VARCHAR(30) NOT NULL,
   salary DECIMAL,
-  department_id INT NOT NULL
+  department_id INT NOT NULL,
+  CONSTRAINT employee_role_pk PRIMARY KEY (id)
 );
 
 DROP TABLE IF EXISTS employee;
@@ -23,6 +25,7 @@ CREATE TABLE employee (
   first_name VARCHAR(30) NOT NULL,
   last_name VARCHAR(30) NOT NULL,
   role_id INT NOT NULL,
-  manager_id INT
+  manager_id INT,
+  CONSTRAINT employee_pk PRIMARY KEY (id)
 );
 
