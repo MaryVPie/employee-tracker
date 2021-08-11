@@ -49,7 +49,7 @@ The following video shows an example of the application being used from the comm
 
 ## Links to Review
 
-* The walkthrough video demonstrating the functionality of the application: 
+* The walkthrough video demonstrating the functionality of the application: https://drive.google.com/file/d/1P4gNUgW-A8xgWP_gapJ8V9-zWDcfJZ0_/view
 
 
 * The URL of the GitHub repository: https://github.com/MaryVPie/employee-tracker
