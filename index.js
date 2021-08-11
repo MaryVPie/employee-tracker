@@ -1,4 +1,4 @@
-// Imports the inquirer package and declares an array of licenses
+// Imports the inquirer package and declares an array of actions
 const mysql = require("mysql2");
 const consoleTable = require("console.table");
 const inquirer = require("inquirer");
@@ -15,22 +15,7 @@ const db = mysql.createConnection(
 );
 
 
-function invokeInquirer() {
-    inquirer
-        .prompt([
-            {
-                type: "list",
-                message: "What would you like to do?",
-                name: "Action",
-                choices: actions
-            }
-        ])
-        .then(answers => {
-            //console.log(answers);
-            console.log('\n\n');
-            actionController(answers.Action);
-        });
-}
+
 
 console.log('\x1b[35m`---------------------------------------------------`');
 console.log('|                                                   |');
@@ -53,6 +38,23 @@ console.log('\n\n');
 //calls function to capture user input
 invokeInquirer();
 
+//select from limited actions
+function invokeInquirer() {
+    inquirer
+        .prompt([
+            {
+                type: "list",
+                message: "What would you like to do?",
+                name: "Action",
+                choices: actions
+            }
+        ])
+        .then(answers => {
+            //console.log(answers);
+            console.log('\n\n');
+            actionController(answers.Action);
+        });
+}
 
 // Takes action and calls necessary method based on it
 function actionController(action) {
@@ -88,9 +90,9 @@ function actionController(action) {
 
 }
 
+//gets all employees from the database, param callback is used to pass the callback function description to caller
 function GetAllEmployees(callback) {
     // Query database
-
     db.query('SELECT employee.id, employee.first_name, employee.last_name, employee_role.title, departments.depname as Department, employee_role.salary as Salary, CONCAT(managers.first_name, \' \', managers.last_name)  as manager ' +
         'FROM employee ' +
         'LEFT JOIN employee managers ON employee.manager_id = managers.id ' +
@@ -98,18 +100,19 @@ function GetAllEmployees(callback) {
         'INNER JOIN departments ON departments.id = employee_role.department_id ', callback);
 }
 
-
+//add an employees to the database
 function AddEmployee() {
-
+    //get all roles to use them for the next inquirer query and insert statement
     GetAllRoles((err, results) => {
         let roles = results;
         //console.log(roles);
         let roleChoices = results.map(it => it.Title);
         //console.log(roleChoices);
+        //get all employees to use them for the next inquirer query and insert statement
         GetAllEmployees((err, employeeResults) => {
 
             let managers = employeeResults;
-
+            //converts initial array of managers to array consisting of their first and last names
             let managerChoices = managers.map(it => `${it.first_name} ${it.last_name}`);
             managerChoices.push("None");
 
@@ -142,14 +145,18 @@ function AddEmployee() {
                 ])
                 .then(answers => {
                     //console.log(answers);
+                    //choose a manager based on the answer if selected None -> null
                     let man = answers.empMan != 'None' ? managers.find(it => `${it.first_name} ${it.last_name}` == answers.empMan) : null;
                     let role = roles.find(it => it.Title == answers.empRole);
                     //console.log("role:", role);
                     //console.log("manager:", man);
+                    //declaring text of the query which goes to the db
                     const dbQueryText = 'INSERT INTO employee (first_name, last_name, role_id, manager_id) ' +
                         `VALUES ('${answers.firstName}' , '${answers.lastName}',${role.Id}, ${man == null ? null : man.id});`
                     // console.log(dbQueryText);
+                    //function which executes db query
                     db.query(dbQueryText,
+                        //call back when the query is done executing
                         (insertErr, insertResults) => {
                            // console.log(insertResults);
                             if (insertErr != null) {
@@ -170,9 +177,12 @@ function AddEmployee() {
 }
 
 function UpdateEmployeeRole() {
+    //get all employees to use them for the next inquirer query and insert statement
     GetAllEmployees((err, empRes) => {
         let chosenEmp = empRes.map(it => `${it.first_name} ${it.last_name}`);
+        //get all roles to use them for the next inquirer query and insert statement
         GetAllRoles((err, roles) => {
+            //converts initial array of roles to array consisting of the title
             let roleChoices = roles.map(it => it.Title);
 
             inquirer
@@ -193,11 +203,10 @@ function UpdateEmployeeRole() {
                 ])
                 .then(answers => {
                     //console.log(answers);
-                  
+                  //choose a role based on the answer 
                     let role = roles.find(it => it.Title == answers.empRole);
-
                     let employee = empRes.find(it => `${it.first_name} ${it.last_name}` == answers.selectEmp);
-
+                    //declaring text of the query which goes to the db
                     const dbQueryUpdated = 'UPDATE employee ' +
                         `SET role_id = ${role.Id} 
                         WHERE id = ${employee.id};`
@@ -219,19 +228,20 @@ function UpdateEmployeeRole() {
 
     });
 }
-
+//gets all roles from the database, param callback is used to pass the callback function description to caller
 function GetAllRoles(callback) {
     // Query database
     db.query('SELECT employee_role.id as Id, employee_role.title as Title, departments.depname as Department, employee_role.salary as Salary ' +
         'FROM employee_role ' +
         'JOIN departments ON employee_role.department_id = departments.id', callback);
 }
-
+//add a role to the database
 function AddRole() {
-
+    //get all departments to use them for the next inquirer query and insert statement
     GetAllDepartments((err, results) => {
 
        // console.log(results);
+        //converts initial array of departments to array consisting of the department
         let deps = results.map(it => it.Department);
        // console.log(deps);
         inquirer
@@ -258,6 +268,7 @@ function AddRole() {
                 //console.log(answers);
                 let dep = results.find(x => x.Department == answers.Department);
                 //console.log(dep);
+                //declaring text of the query which goes to the db
                 db.query('INSERT INTO employee_role (title, salary, department_id) ' +
                     `VALUES ('${answers.title}',${answers.salary},${dep.Id}); `,
                     function (err, results) {
@@ -277,7 +288,7 @@ function AddRole() {
     });
 
 }
-
+//gets all departments from the database, param callback is used to pass the callback function description to caller
 function GetAllDepartments(callback) {
     // Query database
     db.query('SELECT id as Id, depname as Department FROM departments', callback);
@@ -288,7 +299,7 @@ function OutputToConsoleTable(err, results) {
     console.table(results);
     console.log('\n\n');
 }
-
+//add a department to the database
 function AddDepartment() {
 
     inquirer

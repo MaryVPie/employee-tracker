@@ -19,9 +19,9 @@ The following video shows an example of the application being used from the comm
 
 ## Work Done Screenshots 
 
-|<img src="/img/IDX.PNG" width="400" height="450" alt="Index js file"/>| <img src="/img/term.PNG" width="400" height="450" alt="Questions and answers in the terminal"/> | <img src="/img/GenRead.PNG" width="400" height="450" alt="Generated README file"/> |
+|<img src="./Assets/First.PNG" width="400" height="450" alt="Application title"/>| <img src="./Assets/Second.PNG" width="400" height="450" alt="Shows all Employees, Roles, Departments"/> | <img src="./Assets/Third.PNG" width="400" height="450" alt="Shows adding an Employee, a Role, a Department, updating an Employee"/> |
 | --- | --- | --- |
-|  Index.js | Terminal | Generated README.md |
+|  Main | Shows all Employees, Roles, Departments | Shows adding an Employee, a Role, a Department, updating an Employee |
 
 ---
 
